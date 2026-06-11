@@ -1,15 +1,8 @@
-"""Visualization utilities for GeoSupportFM."""
+"""Visualization helpers for GeoSupportFM."""
 
-from .embedding_plots import (
-    plot_confusion_matrix,
+from .synthetic_spatial_plots import (
     plot_feature_importance,
-    plot_pca_scatter,
-    plot_similarity_heatmap,
+    plot_map,
+    plot_pca_projection,
+    plot_scatter,
 )
-
-__all__ = [
-    "plot_confusion_matrix",
-    "plot_feature_importance",
-    "plot_pca_scatter",
-    "plot_similarity_heatmap",
-]
