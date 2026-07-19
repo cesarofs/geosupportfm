@@ -204,12 +204,12 @@ geosupportfm/
 
 ### Phase 1 — Foundations
 
-* [ ] Repository architecture
-* [ ] AlphaEarth data loaders
-* [ ] Sentinel-2 data loaders
-* [ ] Landsat data loaders
-* [ ] Spatial support transformation utilities
-* [ ] Raster aggregation tools
+* [x] Repository architecture
+* [x] AlphaEarth data loaders
+* [x] Sentinel-2 data loaders
+* [x] Landsat data loaders
+* [x] Spatial support transformation utilities
+* [x] Raster aggregation tools
 
 #### Phase 1 quick start
 
@@ -250,10 +250,10 @@ the spatial block utilities support local multi-band and tabular workflows.
 
 ### Phase 2 — Reproducible Science
 
-* [ ] Coffee yield case study
-* [ ] Reproducible notebooks
-* [ ] Benchmark datasets
-* [ ] Open evaluation framework
+* [x] Coffee yield case study
+* [x] Reproducible notebooks
+* [x] Benchmark datasets
+* [x] Open evaluation framework
 
 #### Phase 2 quick start
 
@@ -291,9 +291,9 @@ default experiment.
 
 ### Phase 3 — Embedding Variography
 
-* [ ] Variogram analysis of latent dimensions
-* [ ] Cross-variogram exploration
-* [ ] Spatial structure diagnostics
+* [x] Variogram analysis of latent dimensions
+* [x] Cross-variogram exploration
+* [x] Spatial structure diagnostics
 
 #### Phase 3 quick start
 
