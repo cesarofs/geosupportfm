@@ -211,6 +211,41 @@ geosupportfm/
 * [ ] Spatial support transformation utilities
 * [ ] Raster aggregation tools
 
+#### Phase 1 quick start
+
+The Phase 1 API loads harmonized Earth Observation products from Earth Engine
+and provides NumPy utilities for transforming raster support:
+
+```python
+import ee
+
+from geosupportfm.foundations import (
+    load_alphaearth_embeddings,
+    load_landsat_sr,
+    load_sentinel2_sr,
+)
+from geosupportfm.support import aggregate_array
+
+ee.Initialize(project="your-google-cloud-project")
+region = ee.Geometry.Rectangle([-47.1, -22.9, -46.9, -22.7])
+
+embeddings = load_alphaearth_embeddings(2024, region=region)
+sentinel2 = load_sentinel2_sr("2024-01-01", "2025-01-01", region=region)
+landsat = load_landsat_sr(
+    "2024-01-01",
+    "2025-01-01",
+    region=region,
+    sensors=("landsat8", "landsat9"),
+)
+
+# Aggregate a local 10 m raster band to 30 m mean support.
+band_30m = aggregate_array(band_10m, factor=3, reducer="mean")
+```
+
+Use `sample_alphaearth_embeddings` to extract latent vectors at an Earth
+Engine `FeatureCollection`. `aggregate_raster_stack`, `aggregate_by_group`, and
+the spatial block utilities support local multi-band and tabular workflows.
+
 ---
 
 ### Phase 2 — Reproducible Science
@@ -220,6 +255,38 @@ geosupportfm/
 * [ ] Benchmark datasets
 * [ ] Open evaluation framework
 
+#### Phase 2 quick start
+
+The Phase 2 benchmark generates a reproducible spatial dataset, creates a
+grouped spatial split, and compares Random Forest, ordinary kriging, and a
+hybrid Random Forest plus kriged-residual model:
+
+```python
+from pathlib import Path
+
+from geosupportfm.benchmarks import (
+    SyntheticSpatialCaseStudyConfig,
+    run_case_study,
+)
+
+config = SyntheticSpatialCaseStudyConfig(
+    output_dir=Path("outputs/synthetic_case_study"),
+    random_state=42,
+    n_points=600,
+    n_blocks=8,
+    test_size=0.25,
+)
+result = run_case_study(config)
+
+print(result["comparison"])
+print(result["saved_paths"])
+```
+
+The workflow writes model comparisons, predictions, feature importance, and
+diagnostic figures to the configured output directory. Run
+`python -m geosupportfm.benchmarks.synthetic_spatial_case_study` for the
+default experiment.
+
 ---
 
 ### Phase 3 — Embedding Variography
@@ -227,6 +294,43 @@ geosupportfm/
 * [ ] Variogram analysis of latent dimensions
 * [ ] Cross-variogram exploration
 * [ ] Spatial structure diagnostics
+
+#### Phase 3 quick start
+
+The Phase 3 API measures spatial continuity across latent dimensions, ranks
+their spatial structure, and relates embeddings to an observed target through
+cross-semivariograms:
+
+```python
+from geosupportfm.variograms import (
+    empirical_cross_variogram,
+    spatial_structure_diagnostics,
+)
+
+diagnostics, report = spatial_structure_diagnostics(
+    coords=sample_coords,
+    embeddings=embedding_matrix,
+    band_names=embedding_names,
+    n_lags=12,
+    pair_min=5,
+)
+
+top_dimension = int(report.iloc[0]["dimension"])
+cross_variogram = empirical_cross_variogram(
+    sample_coords,
+    embedding_matrix[:, top_dimension],
+    target_values,
+    n_lags=12,
+    pair_min=5,
+)
+
+print(diagnostics)
+print(report.head(10))
+```
+
+`latent_variography_report` returns the per-dimension ranking directly, while
+`empirical_variogram` and `variogram_summary` expose the underlying univariate
+analysis for custom research workflows.
 
 ---
 
