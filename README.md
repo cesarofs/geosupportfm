@@ -232,9 +232,39 @@ geosupportfm/
 
 ### Phase 4 — Support-Aware Foundation Models
 
-* [ ] Change-of-support correction
-* [ ] Spatial support regularization
-* [ ] Block-level embedding aggregation
+* [x] Change-of-support correction
+* [x] Spatial support regularization
+* [x] Block-level embedding aggregation
+* [x] Permissible Linear Models of Coregionalization
+* [x] Multivariate factorial point/block cokriging
+
+#### Phase 4 quick start
+
+The Phase 4 API represents each spatial scale with a positive-semidefinite
+coregionalization matrix, integrates covariance over discretized supports, and
+uses component-specific cross-covariances to filter multivariate fields:
+
+```python
+from geosupportfm.coregionalization import LMCStructure, LinearModelOfCoregionalization
+from geosupportfm.kriging import factorial_cokriging
+from geosupportfm.support import SpatialSupport
+
+lmc = LinearModelOfCoregionalization((short_structure, long_structure))
+pixel = SpatialSupport.rectangle((10.0, 10.0), discretization=5)
+regional = factorial_cokriging(
+    sample_coords,
+    sample_values,
+    target_coords,
+    lmc,
+    component=1,
+    target_support=pixel,
+)
+```
+
+Use `empirical_variogram_matrix` and `fit_lmc` to calculate an LMC from direct
+and cross-semivariograms. `regularize_lmc` reports point-to-block variance
+correction factors and the regularized block variogram. See
+`examples/phase4_factorial_cokriging.py` for a complete synthetic workflow.
 
 ---
 
